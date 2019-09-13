@@ -16,12 +16,16 @@ class Game:
     def make_user_play(self):
         valid_pos = False
         while not valid_pos:
-            pos = input("What position do you want to mark?(e.g. '1C or B3') ").upper()
+            pos = input("What position do you want to mark?(e.g. '1C or B3'): ").upper()
 
             valid_pos = self.__check_valid_pos(pos)
             if valid_pos:
-                self.board.set_mark(valid_pos, self.get_user_token())
-                break
+                if self.board.is_empty_pos(valid_pos):
+                    self.board.set_mark(valid_pos, self.get_user_token())
+                    break
+                else:
+                    print("that position is already marked!")
+                    valid_pos = False
 
     def make_ia_play(self):
         pass
@@ -44,12 +48,12 @@ class Game:
 
     @staticmethod
     def __check_valid_pos(pos):
-        regex = r'([A-Z][1-3])|([1-3][A-Z])'
+        regex = r'([A-C][1-3])|([1-3][A-C])'
         if len(pos) == 2 and re.match(regex, pos):
             base_num = ord("A")
             if pos[0].isdigit():
-                return int(pos[0]), (ord(pos[1]) - base_num)
-            return int(pos[1]), (ord(pos[0]) - base_num)
+                return int(pos[0]) - 1, (ord(pos[1]) - base_num)
+            return int(pos[1]) - 1, (ord(pos[0]) - base_num)
 
         else:
             return False
@@ -65,4 +69,8 @@ class Board:
 
     def set_mark(self, pos, token):
         row, col = pos
+        print(row,col)
         self.board[row][col] = token
+
+    def is_empty_pos(self, pos):
+        return self.board[pos[0]][pos[1]] == " "
