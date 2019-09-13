@@ -28,7 +28,32 @@ class Game:
                     valid_pos = False
 
     def make_ia_play(self):
+        """Look for a potential user move (two adjacent marked positions) and cancel it.
+        If there isn't, it plays randomly.
+        """
+
+        board = self.board.get_board()
         valid_pos = (random.randint(0, 2), random.randint(0, 2))
+
+        for pos_r, row in enumerate(board):
+            occupied_h = 0
+            occupied_v = 0
+            occupied_o = 0
+            for pos_c, col in enumerate(row):
+                if col == self.get_user_token():  # Search for horizontal play
+                    occupied_h += 1
+                if board[pos_c][pos_r] == self.get_user_token():  # Search for vertical play
+                    occupied_v += 1
+                if board[pos_c][pos_c] == self.get_user_token():  # Search for diagonal play
+                    occupied_o += 1
+
+            if occupied_h == 2 and self.board.is_empty_pos((pos_r, pos_c)):
+                valid_pos = pos_r, pos_c
+            if occupied_v == 2 and self.board.is_empty_pos((pos_c, pos_r)):
+                valid_pos = pos_c, pos_r
+            if occupied_o == 2 and self.board.is_empty_pos((pos_c, pos_c)):
+                valid_pos = pos_c, pos_c
+
         while not self.board.is_empty_pos(valid_pos):
             valid_pos = (random.randint(0, 2), random.randint(0, 2))
         self.board.set_mark(valid_pos, self.get_ia_token())
