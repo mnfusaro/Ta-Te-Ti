@@ -1,29 +1,39 @@
 from game_logic import Game
 from shutil import get_terminal_size
+from string import ascii_uppercase
 
 
 def draw_board(board):
-    print("ESTE ES EL TABLERO")
-    pass
+    print("   ", end="")
+    for num in range(len(board)):  # print the horizontal reference frame
+        print(ascii_uppercase[num], end=' ')
+    print()
+
+    h_ref = 0
+    for row in board:
+        h_ref += 1
+        print(h_ref, end=" |")  # print the vertical reference frame
+        for col in row:
+            print(col, end="|")  # print the contents of the board
+        print()
+        print("  -------")
 
 
 def main():
-
     print("Welcome to the game Ta-Te-Ti!")
-    user_name = input("Please enter your name: ")
 
-    game = Game(user_name)
+    game = Game(input("Please enter your name: "))
 
     print("You will play with '{}'\n".format(game.get_user_token()))
 
     current_user = game.current_player
     draw_board(game.board.get_board())
 
-    while True:
+    while False:
 
         print("It's {} turn".format(current_user))
 
-        if current_user == "user":
+        if current_user == game.get_user_name():
             game.make_user_play()
         else:
             game.make_ia_play()
