@@ -1,6 +1,7 @@
-from game_logic import Game
-from shutil import get_terminal_size
 from string import ascii_uppercase
+import time
+
+from game_logic import Game
 
 
 def draw_board(board):
@@ -8,6 +9,7 @@ def draw_board(board):
     for num in range(len(board)):  # print the horizontal reference frame
         print(ascii_uppercase[num], end=' ')
     print()
+    print("  -------")
 
     h_ref = 0
     for row in board:
@@ -26,29 +28,29 @@ def main():
 
     print("You will play with '{}'\n".format(game.get_user_token()))
 
-    current_user = game.current_player
     draw_board(game.board.get_board())
 
-    while False:
+    while True:
 
-        print("It's {} turn".format(current_user))
+        print("It's {} turn".format(game.current_player))
 
-        if current_user == game.get_user_name():
+        if game.current_player == game.get_user_name():
             game.make_user_play()
         else:
+            print("...")
+            time.sleep(2)
             game.make_ia_play()
 
-        print("\n" * get_terminal_size().lines, end='')
-
         draw_board(game.board.get_board())
+        print("\n" * 2)
 
         game_ended = game.check_end_of_game()
         if game_ended:
-            print("The game is over!")
-            print("{}".format(game_ended["msj"]))
+            print("{}".format(game_ended))
             break
         else:
             game.change_player_turn()
 
 
-main()
+if __name__ == '__main__':
+    main()
