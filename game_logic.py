@@ -1,24 +1,37 @@
 import random
 
-TOKENS = ["X", "O"]
+_TOKENS = ["X", "O"]
 _BOARD = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
 
 
 class Game:
 
-    def __init__(self):
-        self.board = _Board()
-        self.user_token = random.choice(TOKENS)
-        self.ia_token = "X" if self.user_token == "O" else "O"
+    def __init__(self, user_name):
+        self.board = Board()
+        self._user = (user_name, random.choice(_TOKENS))
+        self.ia_token = "X" if self.get_user_token() == "O" else "O"
+        self.current_player = self.get_user_name() if random.choice(_TOKENS) == self.get_user_token() else "ia"
 
-    def make_user_play(self, pos):
+    def make_user_play(self):
         pass
 
     def make_ia_play(self):
         pass
 
+    def change_player_turn(self):
+        pass
 
-class _Board:
+    def check_end_of_game(self):
+        pass
+
+    def get_user_name(self):
+        pass
+
+    def get_user_token(self):
+        pass
+
+
+class Board:
 
     def __init__(self):
         self.board = _BOARD
