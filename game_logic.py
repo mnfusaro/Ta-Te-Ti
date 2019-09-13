@@ -124,7 +124,7 @@ class Board:
 
     def three_aligned(self, cp_tkn):
         """
-        :param cp_tkn:
+        :param cp_tkn: Str (a token)
         :return: A boolean that indicates if there are three contiguous positions occupied by a player.
         """
         three_aligned = ((self.board[0][0] == cp_tkn and self.board[0][1] == cp_tkn and self.board[0][2] == cp_tkn) or
