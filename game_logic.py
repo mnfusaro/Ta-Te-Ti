@@ -14,6 +14,10 @@ class Game:
         self.current_player = self.get_user_name() if random.choice(_TOKENS) == self.get_user_token() else "IA"
 
     def make_user_play(self):
+        """Asks the user for a position and validates it.
+        Once the position is validated, it is marked on the board.
+        """
+
         valid_pos = False
         while not valid_pos:
             pos = input("What position do you want to mark?(e.g. '1C or B3'): ").upper()
@@ -62,16 +66,19 @@ class Game:
         self.current_player = self.get_user_name() if self.current_player == "IA" else "IA"
 
     def check_end_of_game(self):
+        """check if the board was filled or if any player won.
+        :returns A message if this occurs or an empty string if doesn't.
+        """
         cp = self.current_player
         cp_tkn = self.get_ia_token() if cp == "IA" else self.get_user_token()
 
         if self.board.is_full_board():
-            msj = "The board is full, this match ends in a Draw! ;)"
+            msg = "The board is full, this match ends in a Draw! ;)"
         elif self.board.three_aligned(cp_tkn):
-            msj = "Game has ended, {} WIN !!!".format(cp)
+            msg = "Game has ended, {} WIN !!!".format(cp)
         else:
-            msj = ""
-        return msj
+            msg = ""
+        return msg
 
     def get_user_name(self):
         return self._user[0]
@@ -116,7 +123,11 @@ class Board:
         return self._total_pos == self._marked_pos
 
     def three_aligned(self, cp_tkn):
-        winner = ((self.board[0][0] == cp_tkn and self.board[0][1] == cp_tkn and self.board[0][2] == cp_tkn) or
+        """
+        :param cp_tkn:
+        :return: A boolean that indicates if there are three contiguous positions occupied by a player.
+        """
+        three_aligned = ((self.board[0][0] == cp_tkn and self.board[0][1] == cp_tkn and self.board[0][2] == cp_tkn) or
                   (self.board[1][0] == cp_tkn and self.board[1][1] == cp_tkn and self.board[1][2] == cp_tkn) or
                   (self.board[2][0] == cp_tkn and self.board[2][1] == cp_tkn and self.board[2][2] == cp_tkn) or
                   # horizontal
@@ -127,4 +138,4 @@ class Board:
                   (self.board[0][0] == cp_tkn and self.board[1][1] == cp_tkn and self.board[2][2] == cp_tkn) or
                   (self.board[0][2] == cp_tkn and self.board[1][1] == cp_tkn and self.board[2][0] == cp_tkn))
         # diagonal
-        return winner
+        return three_aligned
