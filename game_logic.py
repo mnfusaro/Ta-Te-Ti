@@ -35,7 +35,16 @@ class Game:
             if self.current_player == self.get_ia_token() else self.get_ia_token()
 
     def check_end_of_game(self):
-        pass
+        cp = self.current_player
+        cp_tkn = self.get_ia_token() if cp == "IA" else self.get_user_token()
+
+        if self.board.is_full_board():
+            msj = "The board is full, this match ends in a Draw! ;)"
+        elif self.board.three_aligned(cp_tkn):
+            msj = "Game has ended, {} WIN!!!".format(cp)
+        else:
+            msj = ""
+        return msj
 
     def get_user_name(self):
         return self._user[0]
@@ -63,14 +72,33 @@ class Board:
 
     def __init__(self):
         self.board = _BOARD
+        self._total_pos = 9
+        self._marked_pos = 0
 
     def get_board(self):
         return self.board
 
     def set_mark(self, pos, token):
         row, col = pos
-        print(row,col)
         self.board[row][col] = token
+        self._marked_pos += 1
 
     def is_empty_pos(self, pos):
         return self.board[pos[0]][pos[1]] == " "
+
+    def is_full_board(self):
+        return self._total_pos == self._marked_pos
+
+    def three_aligned(self, cp_tkn):
+        winner = ((self.board[0][0] == cp_tkn and self.board[0][1] == cp_tkn and self.board[0][2] == cp_tkn) or
+                  (self.board[1][0] == cp_tkn and self.board[1][1] == cp_tkn and self.board[1][2] == cp_tkn) or
+                  (self.board[2][0] == cp_tkn and self.board[2][1] == cp_tkn and self.board[2][2] == cp_tkn) or
+                  # horizontal
+                  (self.board[0][0] == cp_tkn and self.board[1][0] == cp_tkn and self.board[2][0] == cp_tkn) or
+                  (self.board[0][1] == cp_tkn and self.board[1][1] == cp_tkn and self.board[2][1] == cp_tkn) or
+                  (self.board[0][2] == cp_tkn and self.board[1][2] == cp_tkn and self.board[2][2] == cp_tkn) or
+                  # vertical right
+                  (self.board[0][0] == cp_tkn and self.board[1][1] == cp_tkn and self.board[2][2] == cp_tkn) or
+                  (self.board[0][2] == cp_tkn and self.board[1][1] == cp_tkn and self.board[2][0] == cp_tkn))
+        # diagonal
+        return winner
